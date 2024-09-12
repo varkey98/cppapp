@@ -1,0 +1,14 @@
+# Default options
+build --cxxopt='-std=c++17'
+build --host_cxxopt='-std=c++17'
+build --cxxopt='-O2'
+build --experimental_scale_timeouts=2.0
+
+# Windows-specific options
+build:windows --cxxopt='/std:c++17'
+build:windows --host_cxxopt='/std:c++17'
+build:windows --cxxopt='/MT' --linkopt='/MT'
+build:windows --features=static_link_msvcrt
+
+# Test options
+test --test_output=all
