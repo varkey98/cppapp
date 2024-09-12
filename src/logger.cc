@@ -6,22 +6,33 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/async.h"
 #include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 Logger::Logger(const std::string &service_name, spdlog::level::level_enum l,
                int max_files, int max_file_size, const char *log_file)
 {
     std::string level_name = spdlog::level::to_string_view(l).data();
 
-    sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-        log_file, max_file_size, max_files);
-    spdlog::init_thread_pool(spdlog::details::default_async_q_size, 1U);
+    // sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+    //     log_file, max_file_size, max_files);
+    // spdlog::init_thread_pool(spdlog::details::default_async_q_size, 1U);
 
-    auto tp = spdlog::thread_pool();
-    logger = std::make_shared<spdlog::async_logger>(
-        service_name, sink.value(), tp,
-        spdlog::async_overflow_policy::overrun_oldest);
+    // auto tp = spdlog::thread_pool();
+    // logger = std::make_shared<spdlog::async_logger>(
+    //     service_name, sink.value(), tp,
+    //     spdlog::async_overflow_policy::overrun_oldest);
 
-    spdlog::initialize_logger(logger);
+    try
+    {
+        logger = spdlog::basic_logger_mt(service_name, log_file);
+    }
+    catch (const spdlog::spdlog_ex &ex)
+    {
+        std::cout << "Log init failed: " << ex.what() << std::endl;
+    }
+
+    // uncomment this for async logger
+    // spdlog::initialize_logger(logger);
     logger->set_pattern("[%Y-%m-%d %T.%e %z] [%^%l%$] [%n] %v");
     logger->set_level(l);
     // spdlog::flush_every(std::chrono::seconds(5));

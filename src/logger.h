@@ -23,5 +23,6 @@ public:
 private:
     std::optional<spdlog::sink_ptr> sink;
     spdlog::level::level_enum log_level;
-    std::shared_ptr<spdlog::async_logger> logger;
+    // std::shared_ptr<spdlog::async_logger> logger;
+    std::shared_ptr<spdlog::logger> logger;
 };

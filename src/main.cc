@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 #include "logger.h"
+#include "spdlog/spdlog.h"
 
 int main()
 {
